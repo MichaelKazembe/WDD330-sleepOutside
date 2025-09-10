@@ -1,6 +1,10 @@
 import { setLocalStorage } from "./utils.mjs";
 import ProductData from "./ProductData.mjs";
 
+
+// Import the product ID from the URL parameters from utils.mjs
+import { getParam } from "./utils.mjs";
+
 const dataSource = new ProductData("tents");
 
 function addProductToCart(product) {
@@ -16,3 +20,7 @@ async function addToCartHandler(e) {
 document
   .getElementById("addToCart")
   .addEventListener("click", addToCartHandler);
+
+
+  const productId = getParam("product");
+// Now you can use productId to fetch product details
