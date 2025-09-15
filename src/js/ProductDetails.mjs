@@ -1,23 +1,66 @@
-function convertToJson(res) {
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error("Bad Response");
+import { setLocalStorage, getLocalStorage } from "./utils.mjs";
+
+// ProductDetails class manages displaying a product's details and adding it to the cart
+export default class ProductDetails {
+  // Constructor sets up the productId, a placeholder for product data, and the data source
+  constructor(productId, dataSource) {
+    this.productId = productId; // The ID of the product to display
+    this.product = {}; // Will hold the product details once loaded
+    this.dataSource = dataSource; // Data source to fetch product info
+  }
+
+  // Initializes the product details: fetches product data and renders it
+  async init() {
+    const product = await this.dataSource.findProductById(this.productId); // Fetch product by ID
+    this.product = product; // Store product details for later use
+    this.renderProductDetails(product); // Render the product details to the page
+    // Set up event listener for the Add to Cart button
+    const addToCartButton = document.getElementById("addToCart");
+    if (addToCartButton) {
+      addToCartButton.addEventListener("click", () => this.addProductToCart());
+    }
+  }
+
+  // Adds the current product to the shopping cart in localStorage
+  addProductToCart() {
+    let cartItems = getLocalStorage("so-cart"); // Get cart array from local storage
+    // If cart is empty or not an array, start with an empty array
+    if (!Array.isArray(cartItems)) {
+      cartItems = [];
+    }
+    cartItems.push(this.product); // Add the current product to the cart
+    setLocalStorage("so-cart", cartItems); // Save updated cart back to local storage
+  }
+
+  // Renders the product details using a template function
+  renderProductDetails() {
+    ProductDetailsTemplate(this.product); // Call the template to update the HTML
   }
 }
 
-export default class ProductDetails {
-  constructor(category) {
-    this.category = category;
-    this.path = `../json/${this.category}.json`;
-  }
-  getData() {
-    return fetch(this.path)
-      .then(convertToJson)
-      .then((data) => data);
-  }
-  async findProductById(id) {
-    const products = await this.getData();
-    return products.find((item) => item.Id === id);
+// Template function to render product details into the page
+function ProductDetailsTemplate(product) {
+  const productDetailsElement = document.getElementById("product-details"); // Find the container for product details
+  if (!productDetailsElement)
+    return; // If not found, do nothing
+  else {
+    // Fill the container with product info and an Add to Cart button
+    productDetailsElement.innerHTML = `
+    <h3>${product.Name}</h3>
+    <h2 class="divider">${product.NameWithoutBrand}</h2>
+    <img
+      class="divider"
+      src="${product.image}"
+      alt="${product.Name}"
+      loading="lazy"
+    />
+    <p class="product-card__price">${product.ListPrice}</p>
+    <p class="product__color">${product.Colors[0].ColorName}</p>
+    <p class="product__description">
+      ${product.DescriptionHtmlSimple}</p>
+    <div class="product-detail__add">
+      <button id="addToCart" data-id="${product.Id}">Add to Cart</button>
+    </div>
+    `;
   }
 }
