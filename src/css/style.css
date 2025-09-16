@@ -256,6 +256,22 @@ button {
     grid-template-columns: 150px auto 15%;
   }
 }
+/* Cart Items Total */
+/* Hide elements by default */
+.hide {
+  display: none;
+}
+
+/* Cart footer styles */
+.cart-footer {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: var(--light-grey);
+  border-top: 1px solid #ddd;
+  text-align: right;
+  font-size: var(--large-font);
+  font-weight: medium;
+}
 
 footer {
   font-size: var(--small-font);

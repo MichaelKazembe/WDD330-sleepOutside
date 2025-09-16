@@ -26,3 +26,24 @@ function cartItemTemplate(item) {
 }
 
 renderCartContents();
+
+// Function to update the cart total 
+function updateCartTotal() {
+  const cartItemsData = getLocalStorage("so-cart");
+  let totalCartItems = 0;
+  // If there are items in the cart, calculate the total
+  if (Array.isArray(cartItemsData) && cartItemsData.length > 0) {
+    cartItemsData.forEach((item) => {
+      totalCartItems += item.FinalPrice;
+    });
+    // Update the total in the DOM and show the cart footer
+    document.querySelector(".cart__total").textContent =
+      `Total: $${totalCartItems.toFixed(2)}`;
+    document.querySelector(".cart-footer").classList.remove("hide");
+  } else {
+    // If the cart is empty, hide the cart footer
+    document.querySelector(".cart-footer").classList.add("hide");
+  }
+}
+
+updateCartTotal();
