@@ -13,11 +13,14 @@ export default class ProductDetails {
   async init() {
     const product = await this.dataSource.findProductById(this.productId); // Fetch product by ID
     this.product = product; // Store product details for later use
-    this.renderProductDetails(product); // Render the product details to the page
+    this.renderProductDetails(); // Render the product details to the page
     // Set up event listener for the Add to Cart button
     const addToCartButton = document.getElementById("addToCart");
     if (addToCartButton) {
-      addToCartButton.addEventListener("click", () => this.addProductToCart());
+      addToCartButton.addEventListener(
+        "click",
+        this.addProductToCart.bind(this),
+      );
     }
   }
 
@@ -40,21 +43,20 @@ export default class ProductDetails {
 
 // Template function to render product details into the page
 function ProductDetailsTemplate(product) {
-  const productDetailsElement = document.getElementById("product-details"); // Find the container for product details
-  if (!productDetailsElement)
-    return; // If not found, do nothing
-  else {
-    // Fill the container with product info and an Add to Cart button
+  const productDetailsElement = document.querySelector(".product-detail"); // Find the container for product details
+  if (!productDetailsElement) return; // If not found, do nothing
+  
+  // Fill the container with product info and an Add to Cart button
     productDetailsElement.innerHTML = `
-    <h3>${product.Name}</h3>
+    <h3>${product.Brand.Name}</h3>
     <h2 class="divider">${product.NameWithoutBrand}</h2>
     <img
       class="divider"
-      src="${product.image}"
+      src="${product.Image}"
       alt="${product.Name}"
       loading="lazy"
     />
-    <p class="product-card__price">${product.ListPrice}</p>
+    <p class="product-card__price">$${product.ListPrice}</p>
     <p class="product__color">${product.Colors[0].ColorName}</p>
     <p class="product__description">
       ${product.DescriptionHtmlSimple}</p>
@@ -63,4 +65,3 @@ function ProductDetailsTemplate(product) {
     </div>
     `;
   }
-}
