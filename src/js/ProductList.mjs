@@ -1,3 +1,4 @@
+import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
   return ` 
@@ -33,10 +34,19 @@ export default class ProductList {
   renderList(productList) {
     if (!this.listElement) return; // If the list element is not found, do nothing
     // Use map to transform each product into an HTML string using the template
-    const productHTMLString = productList
-      .map((product) => productCardTemplate(product))
-      .join("");
+    // const productHTMLString = productList
+    //   .map((product) => productCardTemplate(product))
+    //   .join("");
     // Insert the combined HTML into the DOM
-    this.listElement.insertAdjacentHTML("afterbegin", productHTMLString);
+    // this.listElement.insertAdjacentHTML("afterbegin", productHTMLString);
+
+    // Use the utility function to render the list
+    renderListWithTemplate(
+      productCardTemplate,
+      this.listElement,
+      productList,
+      "afterbegin",
+      true,
+    );
   }
 }
