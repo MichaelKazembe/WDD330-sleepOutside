@@ -1,3 +1,4 @@
+
 function productCardTemplate(product) {
   return ` 
     <li class="product-card">
@@ -32,10 +33,10 @@ export default class ProductList {
   renderList(productList) {
     if (!this.listElement) return; // If the list element is not found, do nothing
     // Use map to transform each product into an HTML string using the template
-    const productHTML = productList
+    const productHTMLString = productList
       .map((product) => productCardTemplate(product))
       .join("");
     // Insert the combined HTML into the DOM
-    this.listElement.insertAdjacentHTML("afterbegin", productHTML);
+    this.listElement.insertAdjacentHTML("afterbegin", productHTMLString);
   }
 }
