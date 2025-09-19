@@ -30,9 +30,42 @@ export function getParam(param) {
   return product;
 }
 
-export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
+export function renderListWithTemplate(
+  templateFn,
+  parentElement,
+  list,
+  position = "afterbegin",
+  clear = false,
+) {
   if (clear) parentElement.innerHTML = "";
   const productHTMLString = list.map((item) => templateFn(item)).join("");
   parentElement.insertAdjacentHTML(position, productHTMLString);
+}
 
+export function renderWithTemplate(template, parentElement, data, callback) {
+  parentElement.innerHTML = template;
+  if (callback) {
+    callback(data);
+  }
+}
+
+export async function loadTemplate(path) {
+  const response = await fetch(path);
+  if (response.ok) {
+    const template = await response.text();
+    return template;
+  } else {
+    throw new Error(`Unable to load template: ${path}`);
+  }
+}
+
+export async function loadHeaderFooter() {
+  // load header
+  const headerTemplate =  await loadTemplate("./partials/header.html");
+  const headerElement = qs("#main-header");
+  renderWithTemplate(headerTemplate, headerElement); 
+  // load footer
+  const footerTemplate =  await loadTemplate("./partials/footer.html");
+  const footerElement = qs("#main-footer");
+  renderWithTemplate(footerTemplate, footerElement);
 }
