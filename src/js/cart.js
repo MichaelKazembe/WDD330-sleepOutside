@@ -1,5 +1,5 @@
 import { getLocalStorage } from "./utils.mjs";
-
+import Alert from "./alert.js";
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
@@ -24,7 +24,11 @@ function cartItemTemplate(item) {
 
   return newItem;
 }
+// Initialize alert system
+const alert = new Alert("#alert-container");
 
+// Example: show an alert when cart loads
+alert.show("Welcome to your cart!", "info");
 renderCartContents();
 
 // Function to update the cart total 
