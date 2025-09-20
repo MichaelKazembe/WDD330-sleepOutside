@@ -1,60 +1,49 @@
-// src/js/alert.js
-// Handles loading alerts from alerts.json and displaying them.
-
 export default class Alert {
   constructor(jsonFile) {
-    this.jsonFile = jsonFile; // Path to alerts.json
+    this.jsonFile = jsonFile;
   }
 
-  // Fetch alerts from the JSON file
-  async loadAlerts() {
-    try {
-      const response = await fetch(this.jsonFile);
-      const alerts = await response.json();
+  // Show a runtime alert
+  show(message, type = "info") {
+    const container = document.getElementById("alert-container");
+    if (!container) return;
 
-      if (alerts.length > 0) {
-        this.buildAlerts(alerts);
-      }
-    } catch (err) {
-      console.error("❌ Error loading alerts:", err);
+    // Create alert element
+    const p = document.createElement("p");
+    p.textContent = message;
+
+    // Style based on type
+    p.style.padding = "10px";
+    p.style.marginBottom = "8px";
+    p.style.borderRadius = "6px";
+    p.style.position = "relative";
+
+    if (type === "success") {
+      p.style.background = "#d4edda";
+      p.style.color = "#155724";
+    } else if (type === "error") {
+      p.style.background = "#f8d7da";
+      p.style.color = "#721c24";
+    } else {
+      p.style.background = "#cce5ff";
+      p.style.color = "#004085";
     }
-  }
 
-  // Build the alerts and add them to the DOM
-  buildAlerts(alerts) {
-    const section = document.createElement("section");
-    section.classList.add("alert-list");
+    // Close button
+    const closeBtn = document.createElement("span");
+    closeBtn.textContent = "❌";
+    closeBtn.style.cursor = "pointer";
+    closeBtn.style.position = "absolute";
+    closeBtn.style.right = "10px";
+    closeBtn.style.top = "5px";
 
-    alerts.forEach((alert) => {
-      // Create alert message container
-      const p = document.createElement("p");
-      p.textContent = alert.message;
-      p.style.background = alert.background;
-      p.style.color = alert.color;
-      p.style.padding = "10px";
-      p.style.marginBottom = "8px";
-      p.style.borderRadius = "6px";
-      p.style.position = "relative";
+    closeBtn.addEventListener("click", () => p.remove());
+    p.appendChild(closeBtn);
 
-      // Close ❌ button
-      const closeBtn = document.createElement("span");
-      closeBtn.textContent = "❌";
-      closeBtn.style.cursor = "pointer";
-      closeBtn.style.position = "absolute";
-      closeBtn.style.right = "10px";
-      closeBtn.style.top = "5px";
+    // Append to container
+    container.appendChild(p);
 
-      // Remove alert when ❌ clicked
-      closeBtn.addEventListener("click", () => p.remove());
-
-      p.appendChild(closeBtn);
-      section.appendChild(p);
-    });
-
-    // Insert alerts section at the top of <main>
-    const main = document.querySelector("main");
-    if (main) {
-      main.prepend(section);
-    }
+    // Auto-remove after 3 seconds
+    setTimeout(() => p.remove(), 3000);
   }
 }

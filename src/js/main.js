@@ -17,8 +17,6 @@ if (document.querySelector("#product-list")) {
   const products = new ProductList("tents", "#product-list");
   products.init();
 }
-import ProductData from "./ProductData.mjs";
-import ProductList from "./ProductList.mjs";
 
 const dataSource = new ProductData("tents");
 const category = "tents";

@@ -1,4 +1,6 @@
 import { setLocalStorage, getLocalStorage } from "./utils.mjs";
+import Alert from "./alert.js";
+const alert = new Alert();
 
 // ProductDetails class manages displaying a product's details and adding it to the cart
 export default class ProductDetails {
@@ -33,6 +35,8 @@ export default class ProductDetails {
     }
     cartItems.push(this.product); // Add the current product to the cart
     setLocalStorage("so-cart", cartItems); // Save updated cart back to local storage
+    // Show Success alert
+    alert.show(`${this.product.Name} was added to your cart!`, "success");
   }
 
   // Renders the product details using a template function
@@ -45,9 +49,9 @@ export default class ProductDetails {
 function ProductDetailsTemplate(product) {
   const productDetailsElement = document.querySelector(".product-detail"); // Find the container for product details
   if (!productDetailsElement) return; // If not found, do nothing
-  
+
   // Fill the container with product info and an Add to Cart button
-    productDetailsElement.innerHTML = `
+  productDetailsElement.innerHTML = `
     <h3>${product.Brand.Name}</h3>
     <h2 class="divider">${product.NameWithoutBrand}</h2>
     <img
@@ -64,4 +68,4 @@ function ProductDetailsTemplate(product) {
       <button id="addToCart" data-id="${product.Id}">Add to Cart</button>
     </div>
     `;
-  }
+}
