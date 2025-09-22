@@ -241,6 +241,35 @@ button {
   grid-column: 3;
 }
 
+.categories {
+  padding: 2rem;
+  text-align: center;
+}
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+}
+.category-card {
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: transform 0.2s;
+}
+.category-card:hover {
+  transform: scale(1.05);
+  border-color: #333;
+}
+.category-card img {
+  width: 80px;
+  margin-bottom: 0.5rem;
+}
+
+
+
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;

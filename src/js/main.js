@@ -1,8 +1,5 @@
-// main.js
-import ProductData from "./ProductData.mjs";
-import ProductList from "./ProductList.mjs";
+// main.js;
 import Alert from "../js/alert.js";
-import { loadHeaderFooter } from "./utils.mjs";
 
 // Get all products
 const productListData = dataSource.getProducts();
@@ -12,20 +9,3 @@ productList.renderList(productListData);
 // Load alerts from JSON
 const alertSystem = new Alert("../json/alert.json");
 alertSystem.loadAlerts();
-
-loadHeaderFooter();
-
-if (document.querySelector("#product-list")) {
-  const products = new ProductList("tents", "#product-list");
-  products.init();
-}
-
-const dataSource = new ProductData("tents");
-const category = "tents";
-const listElement = document.querySelector(".product-list");
-
-const productList = new ProductList(category, dataSource, listElement);
-productList.init();
-
-// Load header and footer into index.html
-loadHeaderFooter();
