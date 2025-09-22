@@ -2,6 +2,8 @@
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
 import Alert from "../js/alert.js";
+import { loadHeaderFooter } from "./utils.mjs";
+
 // Get all products
 const productListData = dataSource.getProducts();
 // Render the products on the page
@@ -24,3 +26,6 @@ const listElement = document.querySelector(".product-list");
 
 const productList = new ProductList(category, dataSource, listElement);
 productList.init();
+
+// Load header and footer into index.html
+loadHeaderFooter();

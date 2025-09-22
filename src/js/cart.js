@@ -1,5 +1,7 @@
 import { getLocalStorage } from "./utils.mjs";
 import Alert from "./alert.js";
+import { loadHeaderFooter } from "../utils.mjs";
+import ShoppingCart from "./ShoppingCart.mjs";
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
@@ -31,7 +33,7 @@ const alert = new Alert("#alert-container");
 alert.show("Welcome to your cart!", "info");
 renderCartContents();
 
-// Function to update the cart total 
+// Function to update the cart total
 function updateCartTotal() {
   const cartItemsData = getLocalStorage("so-cart");
   let totalCartItems = 0;
@@ -51,3 +53,9 @@ function updateCartTotal() {
 }
 
 updateCartTotal();
+
+// Load header and footer into cart/index.html
+loadHeaderFooter();
+
+const cart = new ShoppingCart("so-cart", "#cart-items"); // "so-cart" is your localStorage key
+cart.renderCartList();
