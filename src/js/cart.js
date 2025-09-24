@@ -1,14 +1,16 @@
 import { getLocalStorage } from "./utils.mjs";
 import { loadHeaderFooter } from "./utils.mjs";
+import Alert from "./alert.js";
 
 loadHeaderFooter();
 
+// Function to render the contents of the cart from localStorage
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 }
-
+// Function to create HTML for a single cart item
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
   <a href="#" class="cart-card__image">
@@ -27,14 +29,9 @@ function cartItemTemplate(item) {
 
   return newItem;
 }
-// Initialize alert system
-const alert = new Alert("#alert-container");
 
-// Example: show an alert when cart loads
-alert.show("Welcome to your cart!", "info");
 renderCartContents();
-
-// Function to update the cart total 
+// Function to update the cart total
 function updateCartTotal() {
   const cartItemsData = getLocalStorage("so-cart");
   let totalCartItems = 0;
@@ -54,3 +51,10 @@ function updateCartTotal() {
 }
 
 updateCartTotal();
+
+// Initialize alert system
+const alert = new Alert("alert-container");
+
+// Example: show an alert when cart loads
+alert.show("Welcome to your cart!", "info");
+renderCartContents();
