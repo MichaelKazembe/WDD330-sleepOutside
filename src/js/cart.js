@@ -53,7 +53,7 @@ function updateCartTotal() {
 updateCartTotal();
 
 // Initialize alert system
-const alert = new Alert("alert-container");
+const alert = new Alert("#alert-container");
 
 // Example: show an alert when cart loads
 alert.show("Welcome to your cart!", "info");
