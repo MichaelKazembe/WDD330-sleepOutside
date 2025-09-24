@@ -5,7 +5,7 @@ function productCardTemplate(product) {
     <li class="product-card">
         <a href="product_pages/?product=${product.Id}">
             <img
-                src="${product.Image}"
+                src="${product.Images.PrimaryMedium}"
                 alt="${product.Name}"
                 loading="lazy"
             />

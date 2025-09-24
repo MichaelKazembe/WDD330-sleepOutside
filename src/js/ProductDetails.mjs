@@ -47,25 +47,43 @@ export default class ProductDetails {
 
 // Template function to render product details into the page
 function ProductDetailsTemplate(product) {
-  const productDetailsElement = document.querySelector(".product-detail"); // Find the container for product details
-  if (!productDetailsElement) return; // If not found, do nothing
+  document.querySelector("h2").textContent =
+    product.Category.charAt(0).toUpperCase() + product.Category.slice(1);
+  document.querySelector("#p-brand").textContent = product.Brand.Name;
+  document.querySelector("#p-name").textContent = product.NameWithoutBrand;
 
-  // Fill the container with product info and an Add to Cart button
-  productDetailsElement.innerHTML = `
-    <h3>${product.Brand.Name}</h3>
-    <h2 class="divider">${product.NameWithoutBrand}</h2>
-    <img
-      class="divider"
-      src="${product.Images.PrimaryExtraLarge}"
-      alt="${product.NameWithoutBrand}"
-      loading="lazy"
-    />
-    <p class="product-card__price">$${product.ListPrice}</p>
-    <p class="product__color">${product.Colors[0].ColorName}</p>
-    <p class="product__description">
-      ${product.DescriptionHtmlSimple}</p>
-    <div class="product-detail__add">
-      <button id="addToCart" data-id="${product.Id}">Add to Cart</button>
-    </div>
-    `;
+  const productImage = document.querySelector("#p-image");
+  productImage.src = product.Images.PrimaryExtraLarge;
+  productImage.alt = product.NameWithoutBrand;
+  const usdPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(Number(product.FinalPrice));
+  document.querySelector("#p-price").textContent = `${usdPrice}`;
+  document.querySelector("#p-color").textContent = product.Colors[0].ColorName;
+  document.querySelector("#p-description").innerHTML =
+    product.DescriptionHtmlSimple;
+
+  document.querySelector("#add-to-cart").dataset.id = product.Id;
 }
+
+// Create HTML for product details
+
+// Fill the container with product info and an Add to Cart button
+// productDetailsElement.innerHTML = `
+//   <h3>${product.Brand.Name}</h3>
+//   <h2 class="divider">${product.NameWithoutBrand}</h2>
+//   <img
+//     class="divider"
+//     src="${product.Images.PrimaryLarge}"
+//     alt="${product.NameWithoutBrand}"
+//     loading="lazy"
+//   />
+//   <p class="product-card__price">$${product.ListPrice}</p>
+//   <p class="product__color">${product.Colors[0].ColorName}</p>
+//   <p class="product__description">
+//     ${product.DescriptionHtmlSimple}</p>
+//   <div class="product-detail__add">
+//     <button id="addToCart" data-id="${product.Id}">Add to Cart</button>
+//   </div>
+//   `;
