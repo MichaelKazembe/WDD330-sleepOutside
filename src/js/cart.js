@@ -27,7 +27,11 @@ function cartItemTemplate(item) {
 
   return newItem;
 }
+// Initialize alert system
+const alert = new Alert("#alert-container");
 
+// Example: show an alert when cart loads
+alert.show("Welcome to your cart!", "info");
 renderCartContents();
 
 // Function to update the cart total 
