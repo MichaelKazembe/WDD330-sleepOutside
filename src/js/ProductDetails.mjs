@@ -56,8 +56,8 @@ function ProductDetailsTemplate(product) {
     <h2 class="divider">${product.NameWithoutBrand}</h2>
     <img
       class="divider"
-      src="${product.Image}"
-      alt="${product.Name}"
+      src="${product.Images.PrimaryExtraLarge}"
+      alt="${product.NameWithoutBrand}"
       loading="lazy"
     />
     <p class="product-card__price">$${product.ListPrice}</p>
