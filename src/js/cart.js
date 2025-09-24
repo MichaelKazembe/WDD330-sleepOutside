@@ -13,13 +13,13 @@ function renderCartContents() {
 // Function to create HTML for a single cart item
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
-  <a href="#" class="cart-card__image">
+  <a href="../product_pages/?product=${item.Id}" class="cart-card__image">
     <img
       src="${item.Image}"
       alt="${item.Name}"
     />
   </a>
-  <a href="#">
+  <a href="../product_pages/?product=${item.Id}" class="cart-card__details">
     <h2 class="card__name">${item.Name}</h2>
   </a>
   <p class="cart-card__color">${item.Colors[0].ColorName}</p>
