@@ -60,7 +60,7 @@ function ProductDetailsTemplate(product) {
     currency: "USD",
   }).format(Number(product.FinalPrice));
   document.querySelector("#productPrice").textContent = `${usdPrice}`;
-  document.querySelector("#productColor").textContent = product.Colors[0].ColorName;
+  document.querySelector("#productColor").textContent = `Color: ${product.Colors[0].ColorName}`;
   document.querySelector("#productDesc").innerHTML =
     product.DescriptionHtmlSimple;
 
