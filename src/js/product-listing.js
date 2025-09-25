@@ -16,3 +16,16 @@ if (titleElement && category) {
 
 const productList = new ProductList(category, dataSource, listElement);
 productList.init();
+
+// Search Product Function
+if (search) {
+  // If search query exists → search API
+  productList = new ProductList("search", dataSource, listElement);
+  dataSource.searchProducts(search).then((data) => {
+    productList.renderList(data);
+  });
+} else if (category) {
+  // Else load by category
+  productList = new ProductList(category, dataSource, listElement);
+  productList.init();
+}

@@ -1,3 +1,5 @@
-import { loadHeaderFooter } from "./utils.mjs";
+import { loadHeaderFooter, initSearch } from "./utils.mjs";
 
-loadHeaderFooter();
+loadHeaderFooter().then(() => {
+  initSearch(); // enable search after header is loaded
+});
