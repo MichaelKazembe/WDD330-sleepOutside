@@ -114,6 +114,8 @@ button {
 
 .divider {
   border-bottom: 2px solid var(--primary-color);
+  margin-bottom: 1em;
+  margin-top: 0.5em;
 }
 
 /* End utility classes */
@@ -153,6 +155,7 @@ button {
   text-align: center;
 }
 
+/* Product Listing Styles */
 .products {
   margin-top: 2rem;
   padding: 1rem;
@@ -170,7 +173,6 @@ button {
   color: var(--dark-grey);
 }
 
-/* Styles for product lists */
 .product-card {
   flex: 1 1 45%;
   margin: 0.25em;
@@ -182,7 +184,7 @@ button {
 .product-card h2,
 .product-card h3,
 .product-card p {
-  margin: 0.5em 0;
+  margin: 1.5em 0;
 }
 
 .card__brand {
