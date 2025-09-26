@@ -333,6 +333,31 @@ button {
   color: inherit;
 }
 
+/* Navbar search box */
+#search-form {
+  display: flex;
+  align-items: center;
+  margin-right: 80px; /* push to right side of navbar */
+  
+}
+
+#search-form button {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px 0 0 4px;
+  cursor: pointer;
+}
+
+#search-form input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+}
+
+
 @media (max-width: 900px) {
   .category-list {
     gap: 1.2rem;

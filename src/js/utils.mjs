@@ -71,3 +71,21 @@ export async function loadHeaderFooter() {
   renderWithTemplate(headerTemplate, headerElement, {});
   renderWithTemplate(footerTemplate, footerElement, {});
 }
+
+// Function to handle search form
+export function initSearch() {
+  const searchForm = document.querySelector("#search-form");
+  const searchInput = document.querySelector("#search-input");
+
+  if (!searchForm) return;
+
+  searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const query = searchInput.value.trim();
+
+    if (query) {
+      // Redirect to product listing page with search parameter
+      window.location.href = `/product_listing/index.html?search=${encodeURIComponent(query)}`;
+    }
+  });
+}

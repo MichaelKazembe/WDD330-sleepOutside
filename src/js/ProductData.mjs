@@ -22,4 +22,12 @@ export default class ProductData {
     console.log("Product data:", product.Result);
     return product.Result;
   }
+
+  // Product search
+  async searchProducts(query) {
+    const data = await this.getData();
+    return data.filter((item) =>
+      item.Name.toLowerCase().includes(query.toLowerCase()),
+    );
+  }
 }
