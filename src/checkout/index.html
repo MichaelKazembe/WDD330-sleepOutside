@@ -8,13 +8,13 @@
 
     <title>Sleep Outside | Checkout</title>
 
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/src/css/style.css" />
   </head>
 
   <body>
     <header class="divider">
       <div class="logo">
-        <img src="images/noun_Tent_2517.svg" alt="tent image for logo" />
+        <img src="/src/public/images/noun_Tent_2517.svg" alt="tent image for logo" />
 
         <a href="index.html">
           Sleep
@@ -59,7 +59,62 @@
     <main class="divider">
       <section class="products">
         <h2>Review & Place your Order</h2>
+        <a href="checkout/index.html" class="btn-checkout">Go to Checkout</a>
       </section>
+      
+  <main>
+    <form id="checkoutForm" action="#" method="POST">
+
+      <!-- Customer Information -->
+      <fieldset>
+        <legend>Customer Information</legend>
+
+        <label for="firstName">* First Name</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">* Last Name</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="address">* Street Address</label>
+        <input type="text" id="address" name="address" required>
+
+        <label for="city">* City</label>
+        <input type="text" id="city" name="city" required>
+
+        <label for="state">* State</label>
+        <input type="text" id="state" name="state" required>
+
+        <label for="zip">* Zip Code</label>
+        <input type="text" id="zip" name="zip" required>
+      </fieldset>
+
+      <!-- Payment Information -->
+      <fieldset>
+        <legend>Payment Information</legend>
+
+        <label for="ccNumber">* Credit Card Number</label>
+        <input type="text" id="ccNumber" name="ccNumber" required pattern="\d{13,16}" title="Enter a valid credit card number">
+
+        <label for="expDate">* Expiration Date</label>
+        <input type="month" id="expDate" name="expDate" required>
+
+        <label for="cvv">* Security Code (CVV)</label>
+        <input type="text" id="cvv" name="cvv" required pattern="\d{3,4}" title="Enter the 3 or 4 digit CVV">
+      </fieldset>
+
+      <!-- Order Summary -->
+      <fieldset>
+        <legend>Order Summary</legend>
+        <div class="order-summary">
+          <p>Subtotal: $<span id="subtotal"></span></p>
+          <p>Tax: $<span id="tax"></span></p>
+          <p>Shipping Estimate: $<span id="shipping"></span></p>
+          <p><strong>Order Total: $<span id="total"></span></strong></p>
+        </div>
+      </fieldset>
+
+      <button type="submit">Place Order</button>
+    </form>
     </main>
 
     <footer>&copy;NOT a real business</footer>
