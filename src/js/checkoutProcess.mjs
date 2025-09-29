@@ -1,6 +1,29 @@
-import { getLocalStorage, loadHeaderFooter } from "./utils.mjs";
+import { getLocalStorage } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 
-loadHeaderFooter();
+const services = new ExternalServices();
+
+function formDataToJSON(formElement) {
+  // convert the form data to a JSON object
+  const formData = new FormData(formElement);
+  const convertedJSON = {};
+  formData.forEach((value, key) => {
+    convertedJSON[key] = value;
+  });
+  return convertedJSON;
+}
+
+function packageItems(items) {
+  // takes the items currently stored in the cart (localstorage) and returns them in a simplified form.
+  // convert the list of products from localStorage to the simpler form required for the checkout process.
+  const simplifiedItems = items.map((item) => ({
+    id: item.Id,
+    name: item.Name,
+    price: item.FinalPrice,
+    quantity: item.quantity || 1,
+  }));
+  return simplifiedItems;
+}
 
 export default class CheckoutProcess {
   constructor(key, outputSelector) {
@@ -63,10 +86,127 @@ export default class CheckoutProcess {
     if (shipping) shipping.innerText = `$${this.shipping.toFixed(2)}`;
     if (orderTotal) orderTotal.innerText = `$${this.orderTotal.toFixed(2)}`;
   }
-}
 
-// Initialize checkout process when page loads
-document.addEventListener("DOMContentLoaded", () => {
-  const checkout = new CheckoutProcess("so-cart", ".order-summary");
-  checkout.init();
-});
+  async checkout(form) {
+    // get the form element data by the form name
+    const json = formDataToJSON(form);
+
+    // convert the form data to a JSON order object using the formDataToJSON function
+    // populate the JSON order object with the order Date, orderTotal, tax, shipping, and list of items
+    const order = {
+      orderDate: new Date().toISOString(),
+      fname: json.fname,
+      lname: json.lname,
+      street: json.street,
+      city: json.city,
+      state: json.state,
+      zip: json.zip,
+      cardNumber: json.cardNumber,
+      expiration: json.expiration,
+      code: json.code,
+      items: packageItems(this.list),
+      orderTotal: this.orderTotal.toFixed(2),
+      shipping: this.shipping,
+      tax: this.tax.toFixed(2),
+    };
+
+    // call the checkout method in the ExternalServices module and send it the JSON order data.
+    return await services.checkout(order);
+  }
+
+  bindEvents() {
+    // Setup expiry date formatting
+    this.setupExpiryDateFormatting();
+
+    // Handle form submission
+    this.setupFormSubmission();
+  }
+
+  setupExpiryDateFormatting() {
+    const expiryInput = document.getElementById("expiry-date");
+    if (expiryInput) {
+      expiryInput.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, ""); // Remove non-digits
+
+        if (value.length >= 2) {
+          value = value.substring(0, 2) + "/" + value.substring(2, 4);
+        }
+
+        e.target.value = value;
+      });
+
+      expiryInput.addEventListener("blur", (e) => {
+        this.validateExpiryDate(e.target);
+      });
+    }
+  }
+
+  validateExpiryDate(input) {
+    const value = input.value;
+    const pattern = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+
+    if (value && !pattern.test(value)) {
+      input.setCustomValidity("Please enter a valid date in MM/YY format");
+      return false;
+    } else if (value) {
+      // Check if date is not in the past
+      const [month, year] = value.split("/");
+      const fullYear = 2000 + parseInt(year, 10);
+      const expiryDate = new Date(fullYear, parseInt(month, 10) - 1);
+      const currentDate = new Date();
+      currentDate.setDate(1); // Set to first day of current month
+
+      if (expiryDate < currentDate) {
+        input.setCustomValidity("Expiration date cannot be in the past");
+        return false;
+      } else {
+        input.setCustomValidity("");
+        return true;
+      }
+    }
+    return true;
+  }
+
+  setupFormSubmission() {
+    const form = document.getElementById("checkout-form");
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault(); // Prevent default form submission
+
+        const submitButton = form.querySelector(".checkout-btn");
+        const originalText = submitButton.textContent;
+
+        try {
+          // Show loading state
+          submitButton.disabled = true;
+          submitButton.textContent = "Processing...";
+
+          // Call checkout process
+          await this.checkout(form);
+
+          // Handle success
+          this.handleCheckoutSuccess();
+        } catch (error) {
+          // Handle error
+          this.handleCheckoutError(submitButton, originalText);
+        }
+      });
+    }
+  }
+
+  handleCheckoutSuccess() {
+    alert("Order placed successfully! Thank you for your purchase.");
+
+    // Clear cart and redirect
+    localStorage.removeItem(this.key);
+    window.location.href = "../index.html";
+  }
+
+  handleCheckoutError(submitButton, originalText) {
+    alert("There was an error processing your order. Please try again.");
+
+    // Reset button
+    submitButton.disabled = false;
+    submitButton.textContent = originalText;
+  }
+}
