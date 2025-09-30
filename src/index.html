@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sleep Outside | Home</title>
-    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
     <script src="js/main.js" type="module"></script>
   </head>
 
@@ -13,12 +13,15 @@
     <main class="divider">
       <div class="hero">
         <img
-          src="/src/public/images/banner-sm.jpgs"
+          src="/images/banner-sm.jpg"
           srcset="images/banner-sm.jpg 500w, images/banner.jpg"
           alt="image of a high mountain lake"
         />
         <div class="logo logo--square">
-          <img src="/src/public/images/noun_Tent_2517.svg" alt="tent image for logo" />
+          <img
+            src="./public/images/noun_Tent_2517.svg"
+            alt="tent image for logo"
+          />
           <div>Sleep<span class="highlight">Outside</span></div>
         </div>
         <div class="mission">
@@ -74,23 +77,24 @@
           </li>
         </ul>
       </section>
-
+      <!-- Newsletter Signup -->
       <section class="newsletter-signup">
-  <h2>Join Our Newsletter</h2>
-  <p>Get the latest updates, deals, and outdoor tips right in your inbox.</p>
-  <form id="newsletterForm">
-    <input 
-      type="email" 
-      id="newsletterEmail" 
-      name="email" 
-      placeholder="Enter your email address" 
-      required 
-    />
-    <button type="submit">Subscribe</button>
-  </form>
-  <div id="newsletterMessage"></div>
-</section>
-
+        <h2>Join Our Newsletter</h2>
+        <p>
+          Get the latest updates, deals, and outdoor tips right in your inbox.
+        </p>
+        <form id="newsletterForm">
+          <input
+            type="email"
+            id="newsletterEmail"
+            name="email"
+            placeholder="Enter your email address"
+            required
+          />
+          <button type="submit">Subscribe</button>
+        </form>
+        <div id="newsletterMessage"></div>
+      </section>
     </main>
     <footer id="main-footer"></footer>
   </body>
