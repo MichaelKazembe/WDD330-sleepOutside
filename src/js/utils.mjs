@@ -87,7 +87,7 @@ export function alertMessage(message, scroll = true) {
   alert.addEventListener("click", function (e) {
     // check if they clicked on the close button (X)
     if (
-      e.target.tagName === "BUTTON" ||
+      e.target.tagName === "button" ||
       e.target.classList.contains("alert-close")
     ) {
       const mainElement = document.querySelector("main");
