@@ -98,12 +98,9 @@ export function alertMessage(message, scroll = true) {
   });
 
   // Try to find the best place to insert the alert for better UX
-  let targetContainer;
-
   // First, try to find the checkout section (for checkout forms)
   const checkoutSection = document.querySelector(".checkout-section");
   if (checkoutSection) {
-    targetContainer = checkoutSection;
     // Insert at the beginning of checkout section, after the h2
     const heading = checkoutSection.querySelector("h2");
     if (heading && heading.nextSibling) {
@@ -116,7 +113,6 @@ export function alertMessage(message, scroll = true) {
     const main = document.querySelector("main");
     if (main) {
       main.prepend(alert);
-      targetContainer = main;
     }
   }
 
