@@ -1,4 +1,4 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, alertMessage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 const services = new ExternalServices();
@@ -87,31 +87,53 @@ export default class CheckoutProcess {
     if (orderTotal) orderTotal.innerText = `$${this.orderTotal.toFixed(2)}`;
   }
 
-  async checkout(form) {
-    // get the form element data by the form name
-    const json = formDataToJSON(form);
+  async checkout() {
+    const formElement = document.forms["checkout-form"];
+    const order = formDataToJSON(formElement);
 
-    // convert the form data to a JSON order object using the formDataToJSON function
-    // populate the JSON order object with the order Date, orderTotal, tax, shipping, and list of items
-    const order = {
-      orderDate: new Date().toISOString(),
-      fname: json.fname,
-      lname: json.lname,
-      street: json.street,
-      city: json.city,
-      state: json.state,
-      zip: json.zip,
-      cardNumber: json.cardNumber,
-      expiration: json.expiration,
-      code: json.code,
-      items: packageItems(this.list),
-      orderTotal: this.orderTotal.toFixed(2),
-      shipping: this.shipping,
-      tax: this.tax.toFixed(2),
-    };
+    order.orderDate = new Date().toISOString();
+    order.orderTotal = this.orderTotal;
+    order.tax = this.tax;
+    order.shipping = this.shipping;
+    order.items = packageItems(this.list);
 
-    // call the checkout method in the ExternalServices module and send it the JSON order data.
-    return await services.checkout(order);
+    try {
+      // This is the risky operation that can fail
+      const response = await services.checkout(order);
+
+      // If we get here, the order was successful
+      return response;
+    } catch (err) {
+      // Handle the error properly
+      let errorMessage = "There was an error processing your order.";
+
+      // Check if this is our custom error with detailed server info
+      if (err.name === "servicesError" && err.message) {
+        // Extract detailed error information from server response
+        const serverError = err.message;
+
+        if (typeof serverError === "object") {
+          // If server sent structured error data
+          if (serverError.message) {
+            errorMessage = serverError.message;
+          } else if (serverError.error) {
+            errorMessage = serverError.error;
+          } else {
+            // If it's an object but not structured as expected
+            errorMessage = JSON.stringify(serverError);
+          }
+        } else if (typeof serverError === "string") {
+          // If server sent simple string error
+          errorMessage = serverError;
+        }
+      } else if (err.message) {
+        // For other types of errors (network issues, etc.)
+        errorMessage = err.message;
+      }
+
+      // Re-throw the error with user-friendly message for the calling code to handle
+      throw new Error(errorMessage);
+    }
   }
 
   bindEvents() {
@@ -167,11 +189,94 @@ export default class CheckoutProcess {
     return true;
   }
 
+  clearAlerts() {
+    // Remove any existing alert messages
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach((alert) => alert.remove());
+  }
+
+  validateForm(form) {
+    const errors = [];
+
+    // Get all required fields
+    const requiredFields = form.querySelectorAll("[required]");
+
+    requiredFields.forEach((field) => {
+      if (!field.value.trim()) {
+        const label = form.querySelector(`label[for="${field.id}"]`);
+        const fieldName = label
+          ? label.textContent.replace("*", "").trim()
+          : field.name;
+        errors.push(`${fieldName} is required`);
+      }
+    });
+
+    // Custom validation for specific fields
+    const cardNumber = form.querySelector("#card-number");
+    if (cardNumber && cardNumber.value) {
+      const cardPattern = /^[0-9\s]{13,19}$/;
+      if (!cardPattern.test(cardNumber.value)) {
+        errors.push("Invalid Card Number");
+      }
+    }
+
+    const expiryDate = form.querySelector("#expiry-date");
+    if (expiryDate && expiryDate.value) {
+      const expiryPattern = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
+      if (!expiryPattern.test(expiryDate.value)) {
+        errors.push("Invalid expiration date");
+      } else {
+        // Check if date is not in the past
+        const [month, year] = expiryDate.value.split("/");
+        const fullYear = 2000 + parseInt(year, 10);
+        const expiry = new Date(fullYear, parseInt(month, 10) - 1);
+        const current = new Date();
+        current.setDate(1);
+
+        if (expiry < current) {
+          errors.push("Invalid expiration date");
+        }
+      }
+    }
+
+    const securityCode = form.querySelector("#security-code");
+    if (securityCode && securityCode.value) {
+      const codePattern = /^[0-9]{3,4}$/;
+      if (!codePattern.test(securityCode.value)) {
+        errors.push("Invalid Security Code");
+      }
+    }
+
+    const zipCode = form.querySelector("#zip-code");
+    if (zipCode && zipCode.value) {
+      const zipPattern = /^[0-9]{5}(-[0-9]{4})?$/;
+      if (!zipPattern.test(zipCode.value)) {
+        errors.push("Invalid ZIP Code");
+      }
+    }
+
+    return errors;
+  }
+
   setupFormSubmission() {
     const form = document.getElementById("checkout-form");
     if (form) {
       form.addEventListener("submit", async (e) => {
         e.preventDefault(); // Prevent default form submission
+
+        // Clear any existing alert messages
+        this.clearAlerts();
+
+        // Check form validity using custom validation
+        const validationErrors = this.validateForm(form);
+
+        // Show custom alert messages for validation errors
+        if (validationErrors.length > 0) {
+          validationErrors.forEach((error) => {
+            alertMessage(error, false); // Don't scroll for multiple messages
+          });
+          return; // Stop execution if form validation fails
+        }
 
         const submitButton = form.querySelector(".checkout-btn");
         const originalText = submitButton.textContent;
@@ -182,28 +287,35 @@ export default class CheckoutProcess {
           submitButton.textContent = "Processing...";
 
           // Call checkout process
-          await this.checkout(form);
+          await this.checkout();
 
           // Handle success
           this.handleCheckoutSuccess();
         } catch (error) {
           // Handle error
-          this.handleCheckoutError(submitButton, originalText);
+          this.handleCheckoutError(submitButton, originalText, error);
         }
       });
     }
   }
 
   handleCheckoutSuccess() {
-    alert("Order placed successfully! Thank you for your purchase.");
-
-    // Clear cart and redirect
+    // Clear cart and redirect to success page
     localStorage.removeItem(this.key);
-    window.location.href = "../index.html";
+    window.location.href = "../checkout/success.html";
   }
 
-  handleCheckoutError(submitButton, originalText) {
-    alert("There was an error processing your order. Please try again.");
+  handleCheckoutError(submitButton, originalText, error) {
+    // Show detailed error message
+    let errorMessage =
+      "There was an error processing your order. Please try again.";
+
+    if (error && error.message) {
+      errorMessage = error.message;
+    }
+
+    // Use custom alert message that appears at top of form
+    alertMessage(errorMessage);
 
     // Reset button
     submitButton.disabled = false;

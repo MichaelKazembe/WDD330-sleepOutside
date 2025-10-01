@@ -71,3 +71,60 @@ export async function loadHeaderFooter() {
   renderWithTemplate(headerTemplate, headerElement, {});
   renderWithTemplate(footerTemplate, footerElement, {});
 }
+
+export function alertMessage(message, scroll = true) {
+  // create element to hold the alert
+  const alert = document.createElement("div");
+  // add a class to style the alert
+  alert.classList.add("alert");
+  // set the contents with message and close button
+  alert.innerHTML = `
+    <p>${message}</p>
+    <button type="button" class="alert-close">&times;</button>
+  `;
+
+  // add a listener to the alert to see if they clicked on the X
+  alert.addEventListener("click", function (e) {
+    // check if they clicked on the close button (X)
+    if (
+      e.target.tagName === "BUTTON" ||
+      e.target.classList.contains("alert-close")
+    ) {
+      // Remove from its parent container
+      if (this.parentNode) {
+        this.parentNode.removeChild(this);
+      }
+    }
+  });
+
+  // Try to find the best place to insert the alert for better UX
+  // First, try to find the checkout section (for checkout forms)
+  const checkoutSection = document.querySelector(".checkout-section");
+  if (checkoutSection) {
+    // Insert at the beginning of checkout section, after the h2
+    const heading = checkoutSection.querySelector("h2");
+    if (heading && heading.nextSibling) {
+      checkoutSection.insertBefore(alert, heading.nextSibling);
+    } else {
+      checkoutSection.prepend(alert);
+    }
+  } else {
+    // Fallback to main element
+    const main = document.querySelector("main");
+    if (main) {
+      main.prepend(alert);
+    }
+  }
+
+  // Scroll the alert into view for better visibility
+  if (scroll && alert) {
+    // Use a small delay to ensure the alert is rendered
+    setTimeout(() => {
+      alert.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }, 100);
+  }
+}

@@ -1,6 +1,8 @@
 import { loadHeaderFooter } from "./utils.mjs";
 
 loadHeaderFooter();
+
+// form handling for newsletter signup
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#newsletterForm");
   const emailInput = document.querySelector("#newsletterEmail");
