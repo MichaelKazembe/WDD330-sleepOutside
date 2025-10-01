@@ -128,3 +128,41 @@ export function alertMessage(message, scroll = true) {
     }, 100);
   }
 }
+
+// Update cart count in header
+export function updateCartCount() {
+  // Wait for DOM to be ready if element not found
+  const cartCountElement = document.getElementById("cart-count");
+  if (!cartCountElement) {
+    // If element not found, try again after a short delay
+    setTimeout(updateCartCount, 100);
+    return;
+  }
+
+  // Get cart items from localStorage
+  const cartItems = getLocalStorage("so-cart") || [];
+
+  // Calculate total quantity of items (handle both single items and items with quantities)
+  const totalItems = cartItems.reduce((total, item) => {
+    const quantity = parseInt(item.quantity) || 1;
+    return total + quantity;
+  }, 0);
+
+  // Update the display
+  cartCountElement.textContent = totalItems;
+
+  // Show/hide the count based on whether cart has items
+  if (totalItems === 0) {
+    cartCountElement.classList.add("hidden");
+  } else {
+    cartCountElement.classList.remove("hidden");
+
+    // Add bounce animation when count changes (only if not already updating)
+    if (!cartCountElement.classList.contains("updating")) {
+      cartCountElement.classList.add("updating");
+      setTimeout(() => {
+        cartCountElement.classList.remove("updating");
+      }, 300);
+    }
+  }
+}

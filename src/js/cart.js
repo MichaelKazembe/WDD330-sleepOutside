@@ -1,8 +1,11 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, updateCartCount } from "./utils.mjs";
 import { loadHeaderFooter } from "./utils.mjs";
 import Alert from "./alert.js";
 
-loadHeaderFooter();
+// Load header/footer first, then initialize cart count
+loadHeaderFooter().then(() => {
+  updateCartCount();
+});
 
 // Helper to get cart items as a map of productId to item with quantity
 function getCartMap() {
@@ -88,4 +91,7 @@ export function addProductToCart(product) {
     cartItems.push({ ...product, quantity: 1 });
   }
   setLocalStorage("so-cart", cartItems);
+
+  // Update cart count in header
+  updateCartCount();
 }
