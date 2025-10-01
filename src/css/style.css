@@ -1131,6 +1131,13 @@ footer {
   animation: slideDown 0.3s ease-out;
 }
 
+/* Alert positioning within checkout section for better mobile UX */
+.checkout-section .alert {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;

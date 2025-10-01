@@ -87,20 +87,48 @@ export function alertMessage(message, scroll = true) {
   alert.addEventListener("click", function (e) {
     // check if they clicked on the close button (X)
     if (
-      e.target.tagName === "button" ||
+      e.target.tagName === "BUTTON" ||
       e.target.classList.contains("alert-close")
     ) {
-      const mainElement = document.querySelector("main");
-      mainElement.removeChild(this);
+      // Remove from its parent container
+      if (this.parentNode) {
+        this.parentNode.removeChild(this);
+      }
     }
   });
 
-  // add the alert to the top of main
-  const main = document.querySelector("main");
-  main.prepend(alert);
+  // Try to find the best place to insert the alert for better UX
+  let targetContainer;
 
-  // make sure they see the alert by scrolling to the top of the window
-  if (scroll) {
-    window.scrollTo(0, 0);
+  // First, try to find the checkout section (for checkout forms)
+  const checkoutSection = document.querySelector(".checkout-section");
+  if (checkoutSection) {
+    targetContainer = checkoutSection;
+    // Insert at the beginning of checkout section, after the h2
+    const heading = checkoutSection.querySelector("h2");
+    if (heading && heading.nextSibling) {
+      checkoutSection.insertBefore(alert, heading.nextSibling);
+    } else {
+      checkoutSection.prepend(alert);
+    }
+  } else {
+    // Fallback to main element
+    const main = document.querySelector("main");
+    if (main) {
+      main.prepend(alert);
+      targetContainer = main;
+    }
+  }
+
+  // Scroll the alert into view for better visibility
+  if (scroll && alert) {
+    // Use a small delay to ensure the alert is rendered
+    setTimeout(() => {
+      alert.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }, 100);
   }
 }
