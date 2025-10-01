@@ -1,4 +1,4 @@
-import { setLocalStorage, getLocalStorage } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage, updateCartCount } from "./utils.mjs";
 import Alert from "./alert.js";
 const alert = new Alert();
 
@@ -35,6 +35,10 @@ export default class ProductDetails {
     }
     cartItems.push(this.product); // Add the current product to the cart
     setLocalStorage("so-cart", cartItems); // Save updated cart back to local storage
+
+    // Update cart count in header
+    updateCartCount();
+
     // Show Success alert
     alert.show(`${this.product.Name} was added to your cart!`, "success");
   }
@@ -60,7 +64,8 @@ function ProductDetailsTemplate(product) {
     currency: "USD",
   }).format(Number(product.FinalPrice));
   document.querySelector("#productPrice").textContent = `${usdPrice}`;
-  document.querySelector("#productColor").textContent = `Color: ${product.Colors[0].ColorName}`;
+  document.querySelector("#productColor").textContent =
+    `Color: ${product.Colors[0].ColorName}`;
   document.querySelector("#productDesc").innerHTML =
     product.DescriptionHtmlSimple;
 

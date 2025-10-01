@@ -1,9 +1,16 @@
-import { loadHeaderFooter } from "./utils.mjs";
+import { loadHeaderFooter, updateCartCount } from "./utils.mjs";
 
-loadHeaderFooter();
+// Load header/footer first, then initialize cart count
+loadHeaderFooter().then(() => {
+  updateCartCount();
+});
 
-// form handling for newsletter signup
+// Initialize cart count and form handling when page loads
 document.addEventListener("DOMContentLoaded", () => {
+  // Also call updateCartCount here as backup
+  setTimeout(() => updateCartCount(), 100);
+
+  // form handling for newsletter signup
   const form = document.querySelector("#newsletterForm");
   const emailInput = document.querySelector("#newsletterEmail");
   const messageBox = document.querySelector("#newsletterMessage");

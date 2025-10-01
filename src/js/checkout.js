@@ -1,7 +1,10 @@
-import { loadHeaderFooter } from "./utils.mjs";
+import { loadHeaderFooter, updateCartCount } from "./utils.mjs";
 import CheckoutProcess from "./checkoutProcess.mjs";
 
-loadHeaderFooter();
+// Load header/footer first, then initialize cart count
+loadHeaderFooter().then(() => {
+  updateCartCount();
+});
 
 // Initialize checkout process when page loads
 document.addEventListener("DOMContentLoaded", () => {

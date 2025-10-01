@@ -140,6 +140,49 @@ button {
   fill: gray;
 }
 
+/* Cart count superscript badge */
+.cart-count {
+  position: absolute;
+  top: 0.5em;
+  right: -0.3em;
+  background-color: var(--secondary-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: bold;
+  line-height: 1;
+  z-index: 10;
+  min-width: 18px;
+  transition: all 0.2s ease;
+}
+
+/* Hide when cart is empty */
+.cart-count.hidden {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+/* Animation when count changes */
+.cart-count.updating {
+  animation: cartBounce 0.3s ease;
+}
+
+@keyframes cartBounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
 /* End cart icon styles */
 
 .mission {
