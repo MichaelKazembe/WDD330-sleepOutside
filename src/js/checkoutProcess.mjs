@@ -87,31 +87,53 @@ export default class CheckoutProcess {
     if (orderTotal) orderTotal.innerText = `$${this.orderTotal.toFixed(2)}`;
   }
 
-  async checkout(form) {
-    // get the form element data by the form name
-    const json = formDataToJSON(form);
+  async checkout() {
+    const formElement = document.forms["checkout-form"];
+    const order = formDataToJSON(formElement);
 
-    // convert the form data to a JSON order object using the formDataToJSON function
-    // populate the JSON order object with the order Date, orderTotal, tax, shipping, and list of items
-    const order = {
-      orderDate: new Date().toISOString(),
-      fname: json.fname,
-      lname: json.lname,
-      street: json.street,
-      city: json.city,
-      state: json.state,
-      zip: json.zip,
-      cardNumber: json.cardNumber,
-      expiration: json.expiration,
-      code: json.code,
-      items: packageItems(this.list),
-      orderTotal: this.orderTotal.toFixed(2),
-      shipping: this.shipping,
-      tax: this.tax.toFixed(2),
-    };
+    order.orderDate = new Date().toISOString();
+    order.orderTotal = this.orderTotal;
+    order.tax = this.tax;
+    order.shipping = this.shipping;
+    order.items = packageItems(this.list);
 
-    // call the checkout method in the ExternalServices module and send it the JSON order data.
-    return await services.checkout(order);
+    try {
+      // This is the risky operation that can fail
+      const response = await services.checkout(order);
+
+      // If we get here, the order was successful
+      return response;
+    } catch (err) {
+      // Handle the error properly
+      let errorMessage = "There was an error processing your order.";
+
+      // Check if this is our custom error with detailed server info
+      if (err.name === "servicesError" && err.message) {
+        // Extract detailed error information from server response
+        const serverError = err.message;
+
+        if (typeof serverError === "object") {
+          // If server sent structured error data
+          if (serverError.message) {
+            errorMessage = serverError.message;
+          } else if (serverError.error) {
+            errorMessage = serverError.error;
+          } else {
+            // If it's an object but not structured as expected
+            errorMessage = JSON.stringify(serverError);
+          }
+        } else if (typeof serverError === "string") {
+          // If server sent simple string error
+          errorMessage = serverError;
+        }
+      } else if (err.message) {
+        // For other types of errors (network issues, etc.)
+        errorMessage = err.message;
+      }
+
+      // Re-throw the error with user-friendly message for the calling code to handle
+      throw new Error(errorMessage);
+    }
   }
 
   bindEvents() {
@@ -182,13 +204,13 @@ export default class CheckoutProcess {
           submitButton.textContent = "Processing...";
 
           // Call checkout process
-          await this.checkout(form);
+          await this.checkout();
 
           // Handle success
           this.handleCheckoutSuccess();
         } catch (error) {
           // Handle error
-          this.handleCheckoutError(submitButton, originalText);
+          this.handleCheckoutError(submitButton, originalText, error);
         }
       });
     }
@@ -199,11 +221,19 @@ export default class CheckoutProcess {
 
     // Clear cart and redirect
     localStorage.removeItem(this.key);
-    window.location.href = "../index.html";
+    window.location.href = "../checkout/success.html";
   }
 
-  handleCheckoutError(submitButton, originalText) {
-    alert("There was an error processing your order. Please try again.");
+  handleCheckoutError(submitButton, originalText, error) {
+    // Show detailed error message
+    let errorMessage =
+      "There was an error processing your order. Please try again.";
+
+    if (error && error.message) {
+      errorMessage = error.message;
+    }
+
+    alert(errorMessage);
 
     // Reset button
     submitButton.disabled = false;

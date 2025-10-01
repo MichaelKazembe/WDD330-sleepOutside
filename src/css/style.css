@@ -696,3 +696,240 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/* Success Page Styles */
+.success-main {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.success-container {
+  max-width: 800px;
+  width: 100%;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  animation: slideUp 0.6s ease-out;
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.success-icon {
+  text-align: center;
+  padding: 3rem 2rem 1rem;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--tertiary-color)
+  );
+
+  & svg {
+    animation: checkmark 0.8s ease-out 0.3s both;
+  }
+
+  @keyframes checkmark {
+    from {
+      opacity: 0;
+      transform: scale(0.3) rotate(180deg);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+}
+
+.success-content {
+  padding: 2rem;
+
+  & h1 {
+    text-align: center;
+    color: var(--dark-grey);
+    font-family: var(--font-headline);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+
+    @media (max-width: 600px) {
+      font-size: 2rem;
+    }
+  }
+
+  & .success-subtitle {
+    text-align: center;
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    padding: 0;
+  }
+}
+
+.order-summary {
+  background: var(--light-grey);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 2px solid var(--primary-color);
+
+  & h2 {
+    color: var(--dark-grey);
+    margin-bottom: 1rem;
+    font-family: var(--font-headline);
+    text-align: center;
+  }
+}
+
+.order-details {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #dee2e6;
+
+  &:last-child {
+    border-bottom: none;
+    font-weight: bold;
+    color: var(--secondary-color);
+  }
+
+  & span:first-child {
+    color: #6c757d;
+  }
+
+  & span:last-child {
+    font-weight: 600;
+    color: var(--dark-grey);
+  }
+}
+
+.success-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.btn-primary {
+  background-color: var(--secondary-color);
+  color: white;
+
+  &:hover {
+    background-color: var(--tertiary-color);
+  }
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border-color: var(--secondary-color);
+
+  &:hover {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+}
+
+.success-info {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+.info-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--primary-color);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  & h3 {
+    color: var(--dark-grey);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  & p {
+    color: #6c757d;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+  }
+}
+
+.success-newsletter {
+  margin: 0;
+  border: 2px solid var(--primary-color);
+
+  & .newsletter-form {
+    @media (max-width: 600px) {
+      flex-direction: row;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .success-main {
+    padding: 1rem;
+    min-height: 70vh;
+  }
+
+  .success-container {
+    margin: 1rem 0;
+  }
+
+  .success-content {
+    padding: 1.5rem;
+  }
+
+  .success-icon {
+    padding: 2rem 1rem 0.5rem;
+  }
+}
+/* End Success Page Styles */
