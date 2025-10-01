@@ -226,9 +226,7 @@ export default class CheckoutProcess {
   }
 
   handleCheckoutSuccess() {
-    alert("Order placed successfully! Thank you for your purchase.");
-
-    // Clear cart and redirect
+    // Clear cart and redirect to success page
     localStorage.removeItem(this.key);
     window.location.href = "../checkout/success.html";
   }

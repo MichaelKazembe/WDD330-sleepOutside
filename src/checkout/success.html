@@ -10,41 +10,67 @@
   <body>
     <header class="divider" id="main-header"></header>
 
-    <main class="success-main">
-      <div class="success-container">
-        <!-- Success Message -->
-        <div class="success-content">
-          <h1>Order Placed Successfully!</h1>
-          <p class="success-subtitle">
-            Thank you for your purchase. Your order is being processed.
-          </p>
+    <main class="divider">
+      <section class="success-page">
+        <div class="success-icon">
+          <div class="checkmark">✓</div>
+        </div>
 
-          <!-- Order Details -->
-          <div class="order-summary">
-            <h2>Order Summary</h2>
-            <div class="order-details">
-              <div class="order-item">
-                <span>Order Number:</span>
-                <span id="order-number">SO-12345678</span>
-              </div>
-              <div class="order-item">
-                <span>Order Date:</span>
-                <span id="order-date">${new Date().toLocaleDateString()}</span>
-              </div>
-              <div class="order-item">
-                <span>Estimated Delivery:</span>
-                <span id="delivery-date">5-7 business days</span>
-              </div>
-            </div>
+        <h1>Thank You for Your Order!</h1>
+        <p class="success-message">
+          Your order has been successfully placed and is being processed. You
+          will receive a confirmation email shortly with your order details and
+          tracking information.
+        </p>
+
+        <div class="order-info">
+          <h2>Order Details</h2>
+          <div class="order-item">
+            <span>Order Number:</span>
+            <span class="order-number" id="order-number"
+              >SO-
+              <script>
+                document.write(Date.now().toString().slice(-8));
+              </script></span
+            >
           </div>
-
-          <!-- Action Buttons -->
-          <div class="success-actions">
-            <a href="../index.html" class="btn-primary">Continue Shopping</a>
-            <a href="../cart/index.html" class="btn-secondary">View Cart</a>
+          <div class="order-item">
+            <span>Order Date:</span>
+            <span class="order-date" id="order-date"
+              ><script>
+                document.write(new Date().toLocaleDateString());
+              </script></span
+            >
+          </div>
+          <div class="order-item">
+            <span>Expected Delivery:</span>
+            <span class="delivery-date">5-7 business days</span>
           </div>
         </div>
-      </div>
+
+        <!-- <div class="next-steps">
+          <h3>What happens next?</h3>
+          <ul>
+            <li>
+              You'll receive an email confirmation within the next few minutes
+            </li>
+            <li>
+              Your order will be processed and shipped within 1-2 business days
+            </li>
+            <li>You'll receive tracking information once your order ships</li>
+            <li>Questions? Contact our customer service team</li>
+          </ul>
+        </div> -->
+
+        <div class="action-buttons">
+          <a href="../index.html" class="button">Continue Shopping</a>
+          <a
+            href="../product_listing/index.html"
+            class="button secondary"
+            >Shop More</a
+          >
+        </div>
+      </section>
     </main>
 
     <footer id="main-footer"></footer>
