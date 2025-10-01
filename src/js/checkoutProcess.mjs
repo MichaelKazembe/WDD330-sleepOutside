@@ -195,6 +195,15 @@ export default class CheckoutProcess {
       form.addEventListener("submit", async (e) => {
         e.preventDefault(); // Prevent default form submission
 
+        // Check form validity using HTML5 validation
+        const isValid = form.checkValidity();
+        form.reportValidity(); // Show validation messages to user
+
+        // Only proceed if form is valid
+        if (!isValid) {
+          return; // Stop execution if form validation fails
+        }
+
         const submitButton = form.querySelector(".checkout-btn");
         const originalText = submitButton.textContent;
 

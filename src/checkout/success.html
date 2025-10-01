@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Outside | Order Success</title>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+
+  <body>
+    <header class="divider" id="main-header"></header>
+
+    <main class="success-main">
+      <div class="success-container">
+        <!-- Success Message -->
+        <div class="success-content">
+          <h1>Order Placed Successfully!</h1>
+          <p class="success-subtitle">
+            Thank you for your purchase. Your order is being processed.
+          </p>
+
+          <!-- Order Details -->
+          <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div class="order-details">
+              <div class="order-item">
+                <span>Order Number:</span>
+                <span id="order-number">SO-12345678</span>
+              </div>
+              <div class="order-item">
+                <span>Order Date:</span>
+                <span id="order-date">${new Date().toLocaleDateString()}</span>
+              </div>
+              <div class="order-item">
+                <span>Estimated Delivery:</span>
+                <span id="delivery-date">5-7 business days</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="success-actions">
+            <a href="../index.html" class="btn-primary">Continue Shopping</a>
+            <a href="../cart/index.html" class="btn-secondary">View Cart</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer id="main-footer"></footer>
+    <script src="../js/main.js" type="module"></script>
+  </body>
+</html>
